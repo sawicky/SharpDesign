@@ -1,29 +1,28 @@
-package com.mad.sharpdesign;
+package com.mad.sharpdesign.model;
 
-import java.sql.Blob;
 
 public class Image {
-    private String mFilePath;
-    private String mDate;
+    private String filePath;
+    private String date;
 
     public Image(String filePath, String date) {
-        mFilePath = filePath;
-        mDate = date;
+        this.filePath = filePath;
+        this.date = date;
     }
 
     public String getFilePath() {
-        return mFilePath;
+        return filePath;
     }
 
     public void setFilePath(String filePath) {
-        mFilePath = filePath;
+        this.filePath = filePath;
     }
 
     public String getDate() {
-        return mDate;
+        return date;
     }
 
     public void setDate(String date) {
-        mDate = date;
+        this.date = date;
     }
 }

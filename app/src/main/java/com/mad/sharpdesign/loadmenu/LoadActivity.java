@@ -41,7 +41,7 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         setContentView(R.layout.activity_load_menu);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
-        mPresenter = new LoadPresenter(this, new LoadInteractor());
+        mPresenter = new LoadPresenter(this);
         mContent = (ViewGroup) findViewById(android.R.id.content);
         mButtonURL = (Button) findViewById(R.id.btn_loadURL);
         AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
@@ -81,6 +81,7 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         CharSequence textToPaste = item.getText();
         if (textToPaste == null) return;
         mEditTextURL.setText(textToPaste);
+        //Add some input validation to check if url is valid later
 
         try {
             URL url = new URL(textToPaste.toString());
@@ -88,5 +89,6 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        mPresenter.saveImage(textToPaste.toString());
     }
 }
