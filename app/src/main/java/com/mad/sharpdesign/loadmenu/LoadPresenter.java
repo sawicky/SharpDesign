@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.mad.sharpdesign.R;
 import com.mad.sharpdesign.model.Image;
+import com.mad.sharpdesign.model.ImageDao;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -19,10 +20,11 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class LoadPresenter implements LoadContract.Presenter{
     private LoadContract mLoadContract;
-    private AlertDialog.Builder builder;
+    private final ImageDao mImageDao;
 
-    LoadPresenter(LoadContract loadContract) {
+    LoadPresenter(LoadContract loadContract, ImageDao imageDao) {
         this.mLoadContract = loadContract;
+        this.mImageDao = imageDao;
     }
 
     public void onDestroy() {
@@ -42,6 +44,11 @@ public class LoadPresenter implements LoadContract.Presenter{
 
     private void createImage(String imagePath, String date) {
         Image newImage = new Image(imagePath, date);
-        //Save this image into DB DAO
+        mImageDao.insert(newImage);
+    }
+
+    @Override
+    public void start() {
+
     }
 }

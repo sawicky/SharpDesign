@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 
 import com.mad.sharpdesign.R;
 import com.mad.sharpdesign.editmenu.EditActivity;
+import com.mad.sharpdesign.model.ImageRoomDatabase;
 import com.mad.sharpdesign.utils.fancy.HeaderImageBlur;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -60,7 +61,9 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         setContentView(R.layout.activity_load_menu);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
-        mPresenter = new LoadPresenter(this);
+        ImageRoomDatabase db = ImageRoomDatabase.getDatabase(getApplication());
+        mPresenter = new LoadPresenter(this, db.imageDao());
+
         mContent = (ViewGroup) findViewById(android.R.id.content);
         mButtonURL = (Button) findViewById(R.id.btn_loadURL);
         AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
