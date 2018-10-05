@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface ImageDao {
@@ -16,8 +17,8 @@ public interface ImageDao {
     @Query("DELETE from image_table")
     void deleteAll();
 
-    @Query("SELECT * from image_table ORDER BY date DESC")
-    LiveData<ArrayList<Image>>getAllImages();
+    @Query("SELECT * from image_table")
+    LiveData<List<Image>>getAllImages();
 
     @Query("SELECT * FROM image_table WHERE id=:id")
     Image getImageById(Integer id);

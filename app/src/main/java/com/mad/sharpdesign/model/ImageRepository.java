@@ -6,17 +6,18 @@ import android.os.AsyncTask;
 import android.provider.ContactsContract;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ImageRepository {
     private ImageDao mImageDao;
-    private LiveData<ArrayList<Image>> mImages;
+    private LiveData<List<Image>> mImages;
 
     ImageRepository(Application application) {
         ImageRoomDatabase db = ImageRoomDatabase.getDatabase(application);
         mImageDao = db.imageDao();
         mImages = mImageDao.getAllImages();
     }
-    LiveData<ArrayList<Image>> getImages() {
+    LiveData<List<Image>> getImages() {
         return mImages;
     }
 

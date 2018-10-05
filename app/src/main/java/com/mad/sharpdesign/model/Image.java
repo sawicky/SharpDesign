@@ -7,6 +7,15 @@ import android.support.annotation.NonNull;
 
 @Entity(tableName = "image_table")
 public class Image {
+    @NonNull
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(@NonNull Integer id) {
+        this.id = id;
+    }
+
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "id")
