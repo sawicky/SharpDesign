@@ -24,12 +24,12 @@
         </Spinner>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/edit_imageView"
             android:layout_width="match_parent"
-            android:layout_height=" "
+            android:layout_height="400sp"
             android:layout_marginLeft="15sp"
             android:layout_marginRight="15sp"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             app:srcCompat="@mipmap/placeholder" />
 
         <LinearLayout
@@ -37,20 +37,33 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <!--<SeekBar-->
+                <!--android:id="@+id/seekBar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"/>-->
 
-            <SeekBar
-                android:id="@+id/seekBar2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <!--<SeekBar-->
+                <!--android:id="@+id/seekBar2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"/>-->
 
-            <SeekBar
-                android:id="@+id/seekBar3"
+            <!--<SeekBar-->
+                <!--android:id="@+id/seekBar3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"/>-->
+            <Button
+                android:id="@+id/btn_edit_greyscale"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Greyscale" />
+            <Button
+                android:id="@+id/btn_edit_invert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Invert" />
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

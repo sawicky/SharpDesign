@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_URL"
+    android:id="@+id/layout_camera"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/loadfragment_border_rounded">
+    android:layout_height="wrap_content">
+
 
     <ImageView
-        android:id="@+id/imageView_main"
+        android:id="@+id/imageView_loadCamera"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_alignParentTop="true"
         android:scaleType="fitCenter" />
 
-
     <LinearLayout
+        android:id="@+id/loadCamera_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/mainGrey"
-        android:layout_below="@id/imageView_main"
+        android:layout_below="@id/imageView_loadCamera"
         android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/input_url"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Load URL"
-            android:inputType="textPersonName" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,21 +27,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_cancel"
+                android:id="@+id/btn_loadCamera_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="CAncel" />
 
             <Button
-                android:id="@+id/btn_paste"
+                android:id="@+id/btn_loadCamera_retake"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Paste from clipboard" />
+                android:text="Take another picture" />
 
             <Button
-                android:id="@+id/btn_load"
+                android:id="@+id/btn_loadCamera_load"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
