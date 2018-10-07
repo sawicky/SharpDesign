@@ -6,4 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".editmenu.EditActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/effect_spinner"
+            android:entries="@array/editOptions"
+            android:spinnerMode="dropdown"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            >
+
+        </Spinner>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height=" "
+            android:layout_marginLeft="15sp"
+            android:layout_marginRight="15sp"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/placeholder" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:id="@+id/seekBar2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:id="@+id/seekBar3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

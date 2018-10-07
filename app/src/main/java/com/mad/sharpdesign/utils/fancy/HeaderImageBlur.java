@@ -26,7 +26,8 @@ public class HeaderImageBlur implements com.squareup.picasso.Transformation{
         }
     }
 
-    @Override public Bitmap transform(Bitmap source) {
+    @Override
+    public Bitmap transform(Bitmap source) {
 
         Bitmap blurredBitmap;
         blurredBitmap = Bitmap.createBitmap(source);

@@ -96,6 +96,7 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
             loadImage();
         });
         mButtonURLCancel.setOnClickListener((View v) -> {
+            loadURL.dismiss();
         });
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SharpDesign/");
         folder.mkdirs();
@@ -128,7 +129,7 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
                         } catch (IOException e) {
                             Log.d("MAD","Failed");
                             e.printStackTrace();
-                        }
+                        }2
                     }
                 }).start();
             }
@@ -144,6 +145,8 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
             }
         };
         Picasso.get().load(mPath).into(mLoadTarget);
+        Intent intent = new Intent(this, EditActivity.class);
+        startActivity(intent);
     }
 
     public void pasteClipboard() {
