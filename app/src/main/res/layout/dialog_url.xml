@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:hint="Enter URL"
             android:imeOptions="actionDone"
-            android:inputType="textUri"/>
+            android:inputType="textUri" />
 
 
     </android.support.design.widget.TextInputLayout>

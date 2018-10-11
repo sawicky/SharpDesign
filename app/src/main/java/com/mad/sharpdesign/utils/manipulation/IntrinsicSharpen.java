@@ -10,8 +10,9 @@ import android.renderscript.ScriptIntrinsicConvolve3x3;
 
 public class IntrinsicSharpen {
     public static Bitmap sharpen(Context context, Bitmap bitmap, float weight) {
+        Bitmap newBitmap = bitmap.copy(bitmap.getConfig(), true);
         RenderScript mScript = RenderScript.create(context);
-        final Allocation input = Allocation.createFromBitmap(mScript, bitmap);
+        final Allocation input = Allocation.createFromBitmap(mScript, newBitmap);
         final Allocation output = Allocation.createTyped(mScript, input.getType());
         final ScriptIntrinsicConvolve3x3 script = ScriptIntrinsicConvolve3x3.create(mScript, Element.U8_4(mScript));
         script.setCoefficients(new float[] {
@@ -20,8 +21,8 @@ public class IntrinsicSharpen {
                 -weight,-weight,-weight});
         script.setInput(input);
         script.forEach(output);
-        output.copyTo(bitmap);
+        output.copyTo(newBitmap);
         mScript.destroy();
-        return bitmap;
+        return newBitmap;
     }
 }

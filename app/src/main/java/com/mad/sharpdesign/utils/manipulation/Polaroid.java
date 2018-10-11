@@ -7,7 +7,7 @@ import android.graphics.Paint;
 
 public class Polaroid {
 
-    public static Bitmap polaroid(Bitmap bitmap) {
+    public static Bitmap polaroid(Bitmap bitmap, int r, int g, int b) {
         final float[] inputMatrix = new float[] {
                 1.438f, -0.062f, -0.062f, 0, 0,
                 -0.122f, 1.378f, -0.122f, 0, 0,

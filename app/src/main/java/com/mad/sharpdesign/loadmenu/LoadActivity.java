@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -56,16 +57,16 @@ import java.net.URI;
 public class LoadActivity extends AppCompatActivity implements LoadContract {
     private static final String[] STORAGE_PERMISSIONS = { Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private static final String[] CAMERA_PERMISSIONS = { Manifest.permission.CAMERA};
-    private Button mButtonURL, mButtonCancelURL, mButtonCancelCamera, mButtonURLPaste, mButtonLoadURL, mButtonLoadCamera, mButtonFile, mButtonCamera, mButtonCameraRetake;
+    private Button mButtonURL, mButtonCancelURL, mButtonCancelCamera, mButtonURLPaste, mButtonLoadURL, mButtonLoadCamera, mButtonFile, mButtonCamera, mButtonCameraRetake, mButtonLoadGallery, mButtonCancelGallery, mButtonRepickGallery;
     private File mImageFile;
     private ImageLoader mImageLoader;
     private Uri mPath;
-    private ImageView mCameraImageView, mURLImageView;
+    private ImageView mCameraImageView, mURLImageView, mGalleryImageView;
     private int mDialogType;
     private LinearLayout mURLLinearLayout;
     private RelativeLayout mURLRelativeLayout, mCameraRelativeLayout;
     private EditText mEditTextURL;
-    private View mLoadCameraDialogView, mLoadURLDialogView;
+    private View mLoadCameraDialogView, mLoadURLDialogView, mLoadGalleryDialogView;
     private LoadPresenter mPresenter;
     private Target mPasteTarget, mLoadTarget, mLoadPreviewTarget;
     private AlertDialog.Builder mURLDialogBuilder, mCameraDialogBuilder, mGalleryDialogBuilder;
@@ -74,9 +75,10 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
     private String capturedImagePath;
     private Bitmap mLoadedBitmap;
     private Intent mEditIntent;
-    private AlertDialog mLoadImageURL, mLoadImageCamera;
+    private AlertDialog mLoadImageURL, mLoadImageCamera, mLoadImageGallery;
     private static final int CAMERA_DIALOG_KEY = 1;
     private static final int URL_DIALOG_KEY = 2;
+    private static final int GALLERY_DIALOG_KEY = 3;
     private static final int CAMERA_REQUEST = 1;
     private static final int GALLERY_REQUEST = 2;
     private static final int CAMERA_PERMISSION = 100;
@@ -94,27 +96,23 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         mPresenter = new LoadPresenter(this, db.imageDao());
         InitCameraDialog();
         InitURLDialog();
+        InitGalleryDialog();
         mButtonURL = (Button) findViewById(R.id.btn_loadURL);
         mButtonFile = (Button)findViewById(R.id.btn_loadFile);
         mButtonCamera = (Button)findViewById(R.id.btn_takePicture);
 
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SharpDesign/");
-        Log.d("MAD", "Root folder is: "+folder.getAbsolutePath());
         folder.mkdirs();
         verifyFilePermissions();
 
         mButtonFile.setOnClickListener((View v) -> {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, GALLERY_REQUEST);
+            selectGalleryIntent();
         });
         mButtonCamera.setOnClickListener((View v) -> {
             mDialogType = 1;
-            verifyCameraPermissions();
-            takePictureIntent();
-
-
-
+            if (verifyCameraPermissions()) {
+                takePictureIntent();
+            }
         });
         mButtonURL.setOnClickListener((View v) -> {
             mDialogType = 2;
@@ -140,6 +138,25 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         });
         mButtonLoadCamera.setOnClickListener((View v) -> {
             loadImage();
+        });
+
+        mButtonLoadGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadImage();
+            }
+        });
+        mButtonCancelGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLoadImageGallery.cancel();
+            }
+        });
+        mButtonRepickGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
         });
 
     }
@@ -169,7 +186,11 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
             }
         }
     }
-
+    private void selectGalleryIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, GALLERY_REQUEST);
+    }
     private void InitURLDialog() {
         mContent = (ViewGroup) findViewById(android.R.id.content);
         //Build the Load URL Dialog
@@ -197,6 +218,19 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         mCameraDialogBuilder.setView(mLoadCameraDialogView);
         mLoadImageCamera = mCameraDialogBuilder.create();
     }
+    private void InitGalleryDialog() {
+        mContent = (ViewGroup) findViewById(android.R.id.content);
+        //Build the Load from Camera Dialog
+        mGalleryDialogBuilder = new AlertDialog.Builder(this);
+        mLoadGalleryDialogView = LayoutInflater.from(this).inflate(R.layout.load_image_gallery, (ViewGroup) findViewById(android.R.id.content), false);
+        mButtonLoadGallery = (Button)mLoadGalleryDialogView.findViewById(R.id.btn_loadGallery_load);
+        mButtonCancelGallery = (Button)mLoadGalleryDialogView.findViewById(R.id.btn_loadGallery_cancel);
+        mButtonRepickGallery = (Button)mLoadGalleryDialogView.findViewById(R.id.btn_loadGallery_retake);
+        mGalleryImageView = (ImageView)mLoadGalleryDialogView.findViewById(R.id.imageView_loadGallery);
+        mCameraRelativeLayout = (RelativeLayout)mLoadGalleryDialogView.findViewById(R.id.layout_gallery);
+        mGalleryDialogBuilder.setView(mLoadGalleryDialogView);
+        mLoadImageGallery = mGalleryDialogBuilder.create();
+    }
 
     @Override
     protected void onDestroy() {
@@ -216,6 +250,8 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
                     case URL_DIALOG_KEY:
                         Picasso.get().load(path).into(mURLImageView);
                         break;
+                    case GALLERY_DIALOG_KEY:
+                        Picasso.get().load(path).into(mGalleryImageView);
                     default:
                         break;
                 }
@@ -233,42 +269,45 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
             }
         };
         Picasso.get().load(path).into(mLoadPreviewTarget);
-        Picasso.get().load(path).transform(new HeaderImageBlur(this, 25)).into(img, new Callback() {
-            @Override
-            public void onSuccess() {
-                switch(dialogType) {
-                    case CAMERA_DIALOG_KEY:
-                        mCameraRelativeLayout.setBackground(img.getDrawable());
-                        break;
-                    case URL_DIALOG_KEY:
-                        mURLRelativeLayout.setBackground(img.getDrawable());
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
+//        Picasso.get().load(path).transform(new HeaderImageBlur(this, 25)).into(img, new Callback() {
+//            @Override
+//            public void onSuccess() {
+//                switch(dialogType) {
+//                    case CAMERA_DIALOG_KEY:
+//                        mCameraRelativeLayout.setBackground(img.getDrawable());
+//                        break;
+//                    case URL_DIALOG_KEY:
+//                        mURLRelativeLayout.setBackground(img.getDrawable());
+//                        break;
+//                    default:
+//                        break;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//
+//            }
+//        });
     }
 
     public void loadImage() {
         Log.d("MAD", "Entered load image method");
         mEditIntent = new Intent(this, EditActivity.class);
+
         mLoadTarget = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d("MAD", "Entered run thread");
                         String fileName = ""+System.currentTimeMillis();
+
                         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SharpDesign/" + fileName + ".jpg");
-                        mEditIntent.putExtra(IMAGE_PATH_KEY, mPath);
+                        mEditIntent.putExtra(IMAGE_PATH_KEY, Uri.fromFile(file));
                         Log.d("MAD", "Saving file into: " + file.getAbsolutePath());
                         try {
                             file.createNewFile();
@@ -290,16 +329,12 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
                 e.printStackTrace();
 
             }
-
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
 
             }
         };
         Picasso.get().load(mPath).into(mLoadTarget);
-
-
-
     }
 
     @Override
@@ -312,17 +347,36 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode){
             case CAMERA_REQUEST:
-                mLoadImageCamera.show();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-                Bitmap bitmap = BitmapFactory.decodeFile(capturedImagePath, options);
-                ImageRotate rotate = new ImageRotate(capturedImagePath, bitmap);
-                bitmap = rotate.getRotatedBitmap();
-                loadImageIntoPreview(CAMERA_DIALOG_KEY, getImageUri(this, bitmap));
-                mPath = getImageUri(this, bitmap);
-                Log.d("MAD", "My mpath is :" + mPath);
+                if (resultCode == RESULT_OK) {
+                    mLoadImageCamera.show();
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    Bitmap bitmap = BitmapFactory.decodeFile(capturedImagePath, options);
+                    ImageRotate rotate = new ImageRotate(capturedImagePath, bitmap);
+                    bitmap = rotate.getRotatedBitmap();
+                    loadImageIntoPreview(CAMERA_DIALOG_KEY, getImageUri(this, bitmap));
+                    mPath = getImageUri(this, bitmap);
+                    Log.d("MAD", "My mpath is :" + mPath);
+                } else {
+                    mLoadImageCamera.cancel();
+                }
                 break;
+            case GALLERY_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    mLoadImageGallery.show();
+                    Uri pickedImageURI = data.getData();
+                    String[] filePath = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContentResolver().query(pickedImageURI, filePath, null, null, null);
+                    cursor.moveToFirst();
+                    String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+                    loadImageIntoPreview(GALLERY_DIALOG_KEY, getImageUri(this, bitmap));
+                    mPath = getImageUri(this, bitmap);
+                } else {
+                    mLoadImageGallery.cancel();
+                }
             default:
                 break;
 
@@ -369,26 +423,28 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         Picasso.get().load(mPath).into(mPasteTarget);
 
 
-        Picasso.get().load(mPath).transform(new HeaderImageBlur(this, 25)).into(img, new Callback() {
-            @Override
-            public void onSuccess() {
-                mURLRelativeLayout.setBackground(img.getDrawable());
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
+//        Picasso.get().load(mPath).transform(new HeaderImageBlur(this, 25)).into(img, new Callback() {
+//            @Override
+//            public void onSuccess() {
+//                mURLRelativeLayout.setBackground(img.getDrawable());
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//
+//            }
+//        });
         //mImageLoader.displayImage(textToPaste.toString(), mImageView);
 
         //mPresenter.saveImage(textToPaste.toString());
     }
-    public void verifyCameraPermissions() {
+    public boolean verifyCameraPermissions() {
         int permissionCamera = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (permissionCamera != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, CAMERA_PERMISSIONS, 1 );
+            return true;
         }
+        return true;
     }
     public boolean verifyFilePermissions() {
         // This will return the current Status

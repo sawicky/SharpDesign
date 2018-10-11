@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">SharpDesign</string>
     <string-array name="editOptions">
-        <item>Grayscale</item>
+        <item>Grayscale</item> <!-- 0 -->
+        <item>Real Gaussian Blur</item><!-- 1 -->
+        <item>Sharpen</item><!-- 2 -->
+        <item>Invert</item><!-- 3 -->
+        <item>Polaroid</item><!-- 4 -->
+        <item>Fake Blur</item><!-- 5 -->
+        <item>Sepia</item><!-- 6 -->
+        <item>Gamma Correction</item><!-- 7 -->
+        <item>Contrast Adjustment</item><!-- 8 -->
+        <item>Brightness Adjustment</item><!-- 9 -->
+        <item>Rotate Image</item><!-- 10 -->
+        <item>Saturate</item><!-- 11 -->
+        <item>Colour Intensity</item><!-- 12 -->
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
