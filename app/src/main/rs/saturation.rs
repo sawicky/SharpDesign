@@ -4,6 +4,7 @@
 
 const static float3 baseSaturate = {0.299f, 0.587f, 0.114f};
 float saturationFloat = 0.f;
+//A custom RS kernel that uses commonly found saturation matrix and generates a scalar vector (or dot) which is essentially a combination of both values.
 uchar4 RS_KERNEL saturation(uchar4 in) {
     float4 out = rsUnpackColor8888(in);
     float3 result = dot(out.rgb, baseSaturate);

@@ -1,5 +1,8 @@
 package com.mad.sharpdesign.events;
 
+/**
+ * EventBus event that will post a boolean message to our subscribed activities.
+ */
 public class ApplyEvent {
     public final boolean applied;
 

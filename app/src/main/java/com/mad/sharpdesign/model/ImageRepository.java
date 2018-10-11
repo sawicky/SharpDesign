@@ -8,6 +8,9 @@ import android.provider.ContactsContract;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Room Repository design for our application. Currently unimplemented.
+ */
 public class ImageRepository {
     private ImageDao mImageDao;
     private LiveData<List<Image>> mImages;

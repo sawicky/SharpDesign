@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-
+/**
+ * A NDK implementation of using a ColorMatrix filter to apply a commonly found matrix onto a bitmap to produce a tinted effect.
+ */
 public class Sepia {
 
     public static Bitmap sepia(Bitmap bitmap) {

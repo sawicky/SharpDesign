@@ -8,6 +8,9 @@ import android.support.v8.renderscript.RenderScript;
 import com.mad.sharpdesign.ScriptC_invert;
 import com.mad.sharpdesign.ScriptC_saturation;
 
+/**
+ * RenderScript implementation of saturation, using a custom RS kernel. Applies a strength modifier to all pixels at the same time.
+ */
 public class Saturate {
 
 

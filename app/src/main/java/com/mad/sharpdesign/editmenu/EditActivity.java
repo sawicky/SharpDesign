@@ -1,21 +1,30 @@
 package com.mad.sharpdesign.editmenu;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 
 import com.mad.sharpdesign.R;
 import com.mad.sharpdesign.editmenu.fragments.BlankFragment;
@@ -28,6 +37,7 @@ import com.mad.sharpdesign.events.StrengthEvent;
 import com.mad.sharpdesign.utils.manipulation.Brightness;
 import com.mad.sharpdesign.utils.manipulation.CheapGaussianBlur;
 import com.mad.sharpdesign.utils.manipulation.ColourIntensity;
+import com.mad.sharpdesign.utils.manipulation.Emboss;
 import com.mad.sharpdesign.utils.manipulation.Gamma;
 import com.mad.sharpdesign.utils.manipulation.Greyscale;
 import com.mad.sharpdesign.utils.manipulation.IntrinsicSharpen;
@@ -45,13 +55,19 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Activity that loads the file you have selected in the loading activity from file, then apply manipulations to it.
+ */
 public class EditActivity extends AppCompatActivity {
     private Uri mFilePath;
     private ImageView mMainImageView;
     private Button mGreyScale, mInvert;
     private Bitmap mBitmap, mNewBitmap;
+    private String mImageName;
     private Spinner mOptionSpinner;
     private int mEffectSelected, mStrengthEffect, mRGBEffect;
     private StrengthFragment mStrengthFragment;
@@ -60,7 +76,7 @@ public class EditActivity extends AppCompatActivity {
     private NegativeStrengthFragment mNegativeStrengthFragment;
     private FragmentTransaction mTransaction;
     private static final String IMAGE_PATH_KEY = "ImagePathKey";
-    private static final String IMAGE_KEY = "ImageKey";
+    private static final String IMAGE_NAME = "Name";
 
     @Override
     protected void onStart() {
@@ -70,17 +86,21 @@ public class EditActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         Intent intent = getIntent();
         mFilePath = (Uri) intent.getExtras().get(IMAGE_PATH_KEY);
+        mImageName = intent.getStringExtra(IMAGE_NAME);
         Log.d("MAD", "Loading from: "+mFilePath);
         mOptionSpinner = (Spinner)findViewById(R.id.effect_spinner);
         mMainImageView = (ImageView)findViewById(R.id.edit_imageView);
@@ -143,10 +163,11 @@ public class EditActivity extends AppCompatActivity {
                         mNegativeStrengthFragment = NegativeStrengthFragment.newInstance(100);
                         createTransaction(mNegativeStrengthFragment);
                         mStrengthEffect = 3;
-                        Toast.makeText(getApplicationContext(), "The math here still needs work ;-)", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.errorMath, Toast.LENGTH_LONG).show();
 
                         break;
                     case 8://Contrast
+                        Toast.makeText(getApplicationContext(), R.string.errorNYI, Toast.LENGTH_LONG).show();
                         break;
                     case 9://Brightness
                         mNegativeStrengthFragment = NegativeStrengthFragment.newInstance(100);
@@ -167,6 +188,12 @@ public class EditActivity extends AppCompatActivity {
                         mRGBFragment = RGBFragment.newInstance(255, 255,255,  122);
                         createTransaction(mRGBFragment);
                         mRGBEffect = 0;
+                        break;
+                    case 13: //Emboss
+                        mStrengthFragment = StrengthFragment.newInstance(100);
+                        createTransaction(mStrengthFragment);
+                        mStrengthEffect = 7;
+                        break;
                     default:
                         break;
                 }
@@ -179,6 +206,11 @@ public class EditActivity extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * Helper functions to override create transaction so we don't have to repeat too much code.
+     * @param fragment
+     */
     public void createTransaction(StrengthFragment fragment){
         mTransaction = getSupportFragmentManager().beginTransaction();
         mTransaction.setCustomAnimations(R.anim.enter_left, R.anim.exit_right);
@@ -203,6 +235,11 @@ public class EditActivity extends AppCompatActivity {
         mTransaction.replace(R.id.placeholder_fragment, fragment);
         mTransaction.commit();
     }
+
+    /**
+     * Whenever we change the value of a fragment's Strength or Negative strength slider, run this method.
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onStrengthEvent(StrengthEvent event) {
         int strength = event.getmStrength();
@@ -233,6 +270,8 @@ public class EditActivity extends AppCompatActivity {
             case 6://Saturate
                 mNewBitmap = Saturate.saturate(getApplicationContext(), mBitmap, strength);
                 break;
+            case 7: //Emboss
+                mNewBitmap = Emboss.emboss(getApplicationContext(), mBitmap, strength);
             default:
                 break;
         }
@@ -240,6 +279,11 @@ public class EditActivity extends AppCompatActivity {
         //Picasso.get().load(getImageUri(this, mNewBitmap)).into(mMainImageView);
 
     }
+
+    /**
+     * Runs when an Apply message is sent via EventBus - Whenever we click a fragment's event button
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onApplyEvent(ApplyEvent event) {
         if (event.isApplied()) {
@@ -248,6 +292,10 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Whenever we change a value of a fragment's RGB slider, run this method.
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRGBEvent(RGBEvent event) {
         int r = event.getRed();
@@ -261,18 +309,49 @@ public class EditActivity extends AppCompatActivity {
                 break;
         }
         mMainImageView.setImageBitmap(mNewBitmap);
-        //Picasso.get().load(getImageUri(this, mNewBitmap)).into(mMainImageView);
     }
 
-        public Uri getImageUri(Context context, Bitmap image) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        //image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), image, "temp", null);
-        Log.d("MAD", "Saved file into " +path);
-        final Uri pathURI = Uri.parse(path);
-        File file = new File(path);
-        file.delete();
-        return pathURI;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        Drawable save = menu.getItem(0).getIcon();
+        save.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.saveImage:
+                mBitmap = mNewBitmap;
+                Toast.makeText(getApplicationContext(), R.string.saved, Toast.LENGTH_LONG).show();
+
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SharpDesign/" + mImageName + ".jpg");
+                Log.d("MAD", "Saving file into: " + file.getAbsolutePath());
+                try {
+                    file.createNewFile();
+                    FileOutputStream ostream = new FileOutputStream(file);
+                    mBitmap.compress(Bitmap.CompressFormat.PNG, 90, ostream);
+                    ostream.flush();
+                    ostream.close();
+                } catch (IOException e) {
+                    Log.d("MAD","Failed");
+                    e.printStackTrace();
+                }
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
 }

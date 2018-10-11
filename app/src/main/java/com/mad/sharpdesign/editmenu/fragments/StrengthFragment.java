@@ -19,6 +19,9 @@ import com.mad.sharpdesign.events.StrengthEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
 
+/**
+ * Fragment class for a Strength Fragment
+ */
 public class StrengthFragment extends Fragment {
     private SeekBar mStrengthSeekbar;
     private TextView mStrengthTextView;
@@ -26,6 +29,11 @@ public class StrengthFragment extends Fragment {
     private int mMaxStrength, mCurrentStrength;
     private static final String STRENGTH_KEY = "Strength";
 
+    /**
+     * Instantiator to create a fragment with args, in this case, the strength.
+     * @param strength
+     * @return
+     */
     public static StrengthFragment newInstance(int strength) {
         StrengthFragment strengthFragment = new StrengthFragment();
         Bundle args = new Bundle();

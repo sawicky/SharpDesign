@@ -6,6 +6,9 @@ import android.media.ExifInterface;
 
 import java.io.IOException;
 
+/**
+ * A helper class to correct an image rotation. When taking images with a Camera, images may be rotated due to the camera taking landscape pictures nativel
+ */
 public class ImageRotate {
     private String mPath;
     private Bitmap mBitmap;

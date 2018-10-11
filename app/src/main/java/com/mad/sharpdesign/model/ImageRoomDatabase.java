@@ -5,7 +5,9 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-
+/**
+ * Room Database. Currently unimplemented.
+ */
 @Database(entities = {Image.class}, version = 1)
 public abstract class ImageRoomDatabase extends RoomDatabase{
     public abstract ImageDao imageDao();

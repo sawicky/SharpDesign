@@ -10,14 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3">
         <ImageView
             android:id="@+id/imageView_loadGallery"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:scaleType="fitCenter" />
+        <TextView
+            android:id="@+id/error_gallery_textView"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:text="@string/error"
+            android:drawableBottom="@mipmap/error_fg"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 
         <LinearLayout
             android:id="@+id/loadGallery_layout"
@@ -40,7 +51,7 @@
                     android:layout_marginEnd="@dimen/padding_8dp"
                     android:background="@color/colorPrimaryDark"
                     android:textSize="12sp"
-                    android:text="CAncel" />
+                    android:text="@string/cancel" />
 
                 <Button
                     android:id="@+id/btn_loadGallery_retake"
@@ -50,7 +61,7 @@
                     android:layout_marginEnd="@dimen/padding_8dp"
                     android:background="@color/colorPrimaryDark"
                     android:textSize="12sp"
-                    android:text="Choose another picture" />
+                    android:text="@string/chooseagain" />
 
                 <Button
                     android:id="@+id/btn_loadGallery_load"
@@ -60,7 +71,7 @@
                     android:layout_marginEnd="@dimen/padding_8dp"
                     android:background="@color/colorPrimaryDark"
                     android:textSize="12sp"
-                    android:text="Load" />
+                    android:text="@string/load" />
 
             </LinearLayout>
         </LinearLayout>

@@ -7,6 +7,10 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
+/**
+ * RenderScript implementation using inbuilt RenderScript blur function to produce a real, fast gaussian blur
+ */
+
 public class RealGaussianBlur {
 
     public static Bitmap gaussianBlur(Bitmap bitmap, Context context, int strength) {

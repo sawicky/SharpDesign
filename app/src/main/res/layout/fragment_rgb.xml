@@ -23,7 +23,8 @@
                 android:id="@+id/fragment_rgb_redLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Red"
+                android:textColorHint="@color/colorPrimaryLight"
+                android:hint="@string/red"
                 android:gravity="center"/>
 
             <LinearLayout
@@ -40,11 +41,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
 
-                    android:text="0" />
+                     />
 
                 <SeekBar
                     android:id="@+id/fragment_rgb_redSeekBar"
                     android:layout_width="0dp"
+                    android:thumbTint="@color/red"
                     android:layout_height="wrap_content"
                     android:layout_weight="4" />
 
@@ -60,8 +62,9 @@
                 android:id="@+id/fragment_rgb_greenLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/colorPrimaryLight"
                 android:gravity="center"
-                android:hint="Green" />
+                android:hint="@string/green" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,11 +80,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
 
-                    android:text="0" />
+                     />
 
                 <SeekBar
                     android:id="@+id/fragment_rgb_greenSeekBar"
                     android:layout_width="0dp"
+                    android:thumbTint="@color/green"
                     android:layout_height="wrap_content"
                     android:layout_weight="4" />
 
@@ -99,8 +103,9 @@
                 android:id="@+id/fragment_rgb_blueLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/colorPrimaryLight"
                 android:gravity="center"
-                android:hint="Blue" />
+                android:hint="@string/blue" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,11 +121,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
 
-                    android:text="0" />
+                     />
 
                 <SeekBar
                     android:id="@+id/fragment_rgb_blueSeekBar"
                     android:layout_width="0dp"
+                    android:thumbTint="@color/blue"
                     android:layout_height="wrap_content"
                     android:layout_weight="4" />
 
@@ -132,8 +138,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark"
             android:layout_weight="1"
-            android:text="Apply"
+            android:text="@string/apply"
  />
     </LinearLayout>
     </ScrollView>

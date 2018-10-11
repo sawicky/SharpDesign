@@ -17,6 +17,9 @@ import com.mad.sharpdesign.events.StrengthEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
+/**
+ * Fragment class for a seekbar that starts at 0, and goes into negatives.
+ */
 public class NegativeStrengthFragment extends Fragment {
     private SeekBar mStrengthSeekbar;
     private TextView mStrengthTextView;
@@ -24,6 +27,11 @@ public class NegativeStrengthFragment extends Fragment {
     private int mMaxStrength, mCurrentStrength;
     private static final String STRENGTH_KEY = "Strength";
 
+    /**
+     * Instantiator for the fragment that accepts an argument, in this case, the strength
+     * @param strength
+     * @return
+     */
     public static NegativeStrengthFragment newInstance(int strength) {
         NegativeStrengthFragment strengthFragment = new NegativeStrengthFragment();
         Bundle args = new Bundle();

@@ -8,6 +8,9 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicConvolve3x3;
 
+/**
+ * Sharpen manipulation using RenderScript's inbuilt 3x3 convolution matrix. Uses a common sharpen matrix and a modifier for the original pixel
+ */
 public class IntrinsicSharpen {
     public static Bitmap sharpen(Context context, Bitmap bitmap, float weight) {
         weight = weight / 10;

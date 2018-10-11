@@ -1,5 +1,8 @@
 package com.mad.sharpdesign.events;
 
+/**
+ * EventBus event that will send a RGB int value to our subscribed activities.
+ */
 public class RGBEvent {
     public final int red,green,blue;
 

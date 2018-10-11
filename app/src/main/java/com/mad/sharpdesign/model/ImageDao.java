@@ -8,6 +8,9 @@ import android.arch.persistence.room.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO for the Image object.
+ */
 @Dao
 public interface ImageDao {
 

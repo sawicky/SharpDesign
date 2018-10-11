@@ -17,11 +17,17 @@ import com.mad.sharpdesign.events.StrengthEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
+/**
+ * Fragment file for a Blank manipulation - just contains an Apply button
+ */
 public class BlankFragment extends Fragment {
 
     private Button mApplyButton;
 
-
+    /**
+     * Instantiator for a fragment that can take arguments. In this case, none.
+     * @return
+     */
     public static BlankFragment newInstance() {
         BlankFragment blankFragment = new BlankFragment();
         Bundle args = new Bundle();

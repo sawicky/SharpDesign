@@ -14,6 +14,26 @@
         <item>Rotate Image</item><!-- 10 -->
         <item>Saturate</item><!-- 11 -->
         <item>Colour Intensity</item><!-- 12 -->
+        <item>Emboss</item><!-- 13 -->
     </string-array>
+    <string name="loadGallery">Load from Gallery</string>
+    <string name="loadURL">Load from URL</string>
+    <string name ="loadCamera">Take new picture</string>
+    <string name ="apply">Apply</string>
+    <string name ="red">Red</string>
+    <string name ="green">Green</string>
+    <string name ="blue">Blue</string>
+    <string name ="load">Load</string>
+    <string name="loadHint">Input or paste a URL...</string>
+    <string name ="cancel">Cancel</string>
+    <string name ="error">Error loading image!</string>
+    <string name="paste">Paste from Clipboard</string>
+    <string name="takeagain">Take again</string>
+    <string name ="chooseagain">Choose another picture</string>
+    <string name="save">Save</string>
+    <string name="errorMath">The math here still needs work ;-)</string>
+    <string name="errorNYI">Not yet implemented</string>
+    <string name ="saved">Image saved to Pictures folder</string>
+
 
 </resources>

@@ -18,6 +18,9 @@ import java.util.Locale;
 
 import static android.support.v4.content.ContextCompat.getSystemService;
 
+/**
+ * Presenter class for our activity.
+ */
 public class LoadPresenter implements LoadContract.Presenter{
     private LoadContract mLoadContract;
     private final ImageDao mImageDao;
@@ -42,6 +45,11 @@ public class LoadPresenter implements LoadContract.Presenter{
 
     }
 
+    /**
+     * Save an image into our DAO
+     * @param imagePath
+     * @param date
+     */
     private void createImage(String imagePath, String date) {
         Image newImage = new Image(imagePath, date);
         mImageDao.insert(newImage);

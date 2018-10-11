@@ -7,7 +7,9 @@ import android.support.v8.renderscript.RenderScript;
 
 import com.mad.sharpdesign.ScriptC_brightness;
 
-
+/**
+ * Brightness manipulation that will use our custom Brightness Renderscript kernel to apply given strength value to each pixel of input bitmap.
+ */
 public class Brightness {
     public static Bitmap brightness(Context context,Bitmap bitmap, int strength) {
         float max = 1.0f;

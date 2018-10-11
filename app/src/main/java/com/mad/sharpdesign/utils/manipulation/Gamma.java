@@ -7,6 +7,9 @@ import android.support.v8.renderscript.RenderScript;
 
 import com.mad.sharpdesign.ScriptC_gamma;
 
+/**
+ * Gamma manipulation using a custom RS kernel. Doesn't work very well as Gamma is complicated.
+ */
 public class Gamma {
     public static Bitmap gamma(Context context, Bitmap bitmap, int strength) {
         float max = 1.0f;

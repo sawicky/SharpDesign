@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/loadfragment_border_rounded"
-            android:text="Load from Gallery" />
+            android:text="@string/loadGallery" />
 
         <Button
             android:id="@+id/btn_loadURL"
@@ -35,14 +35,15 @@
             android:layout_width="match_parent"
             android:background="@drawable/loadfragment_border_rounded"
             android:layout_height="wrap_content"
-            android:text="Load from URL" />
+            android:text="@string/loadURL" />
 
         <Button
             android:id="@+id/btn_takePicture"
             android:layout_width="match_parent"
             android:background="@drawable/loadfragment_border_rounded"
             android:layout_height="wrap_content"
-            android:text="Take new picture" />
+            android:text="@string/loadCamera" />
+
 
     </LinearLayout>
 

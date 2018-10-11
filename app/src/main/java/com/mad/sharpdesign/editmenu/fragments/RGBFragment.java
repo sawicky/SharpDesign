@@ -18,6 +18,9 @@ import com.mad.sharpdesign.events.StrengthEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
+/**
+ * Fragment class for the RGB Fragment
+ */
 public class RGBFragment extends Fragment {
     private SeekBar mRedSeekBar, mGreenSeekBar, mBlueSeekBar;
     private TextView mRedTextView, mGreenTextView, mBlueTextView;
@@ -28,7 +31,14 @@ public class RGBFragment extends Fragment {
     private static final String BLUE_KEY = "Blue";
     private static final String PROGRESS_KEY = "Progress";
 
-
+    /**
+     * Instantiator to create a Fragment with arguments, taking a RGB value and max progress.
+     * @param red
+     * @param green
+     * @param blue
+     * @param progress
+     * @return
+     */
     public static RGBFragment newInstance(int red, int green, int blue, int progress) {
         RGBFragment rgbFragment = new RGBFragment();
         Bundle args = new Bundle();

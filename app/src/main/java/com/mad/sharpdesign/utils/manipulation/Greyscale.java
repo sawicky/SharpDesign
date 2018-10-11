@@ -9,6 +9,10 @@ import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.widget.Button;
 
+/**
+ * Custom implementation of a greyscale filter using ColorMatrix, which is an NDK low level implementation of image manipulation and predates RenderScript. Speeds are similar for certain use cases.
+ * Uses a common Greyscale matrix and a multiplier.
+ */
 public class Greyscale {
     private static Bitmap mBitmap;
     public Greyscale(Bitmap bitmap){

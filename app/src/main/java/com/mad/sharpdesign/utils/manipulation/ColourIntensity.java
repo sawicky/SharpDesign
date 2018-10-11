@@ -8,6 +8,9 @@ import android.support.v8.renderscript.RenderScript;
 import com.mad.sharpdesign.ScriptC_colour_intensity;
 import com.mad.sharpdesign.ScriptC_saturation;
 
+/**
+ * Colour intensity manipulation using a custom RS kernel. Applies a new RGB multipler to each pixel from our parameters of the RGB seekbars
+ */
 public class ColourIntensity {
 
 

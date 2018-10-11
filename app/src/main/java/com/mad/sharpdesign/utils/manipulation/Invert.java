@@ -12,6 +12,9 @@ import android.support.v8.renderscript.ScriptIntrinsicColorMatrix;
 
 import com.mad.sharpdesign.ScriptC_invert;
 
+/**
+ * Renderscript implementation of an invert manipulation, that uses a custom RS kernel. Original raw implementation is included below for study/reflection purposes, but it was too slow.
+ */
 public class Invert {
 
 

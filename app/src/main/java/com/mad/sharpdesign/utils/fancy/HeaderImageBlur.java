@@ -7,7 +7,9 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
-
+/**
+ * A custom override for Picasso transform that will blur an image. Used for graphical display during image previews to give it a nice effect. Currently unused.
+ */
 public class HeaderImageBlur implements com.squareup.picasso.Transformation{
     private static final int UP_LIMIT = 25;
     private static final int LOW_LIMIT = 1;

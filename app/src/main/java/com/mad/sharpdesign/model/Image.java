@@ -5,6 +5,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+/**
+ * An image object, with a filepath as string and date.
+ */
 @Entity(tableName = "image_table")
 public class Image {
     @NonNull

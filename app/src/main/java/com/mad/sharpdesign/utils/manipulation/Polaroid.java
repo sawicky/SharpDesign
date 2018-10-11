@@ -5,6 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 
+/**
+ * A NDK implementation of using a ColorMatrix filter to apply a commonly found matrix onto a bitmap to produce a tinted effect.
+ */
 public class Polaroid {
 
     public static Bitmap polaroid(Bitmap bitmap, int r, int g, int b) {

@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mad.exercise5.com.mad.exercise6.activity.MainActivity">
+
+    <item
+        android:id="@+id/saveImage"
+        android:orderInCategory="100"
+        android:icon="@mipmap/save_fg"
+        android:title="@string/save"
+        app:showAsAction="always"
+        />
+</menu>
