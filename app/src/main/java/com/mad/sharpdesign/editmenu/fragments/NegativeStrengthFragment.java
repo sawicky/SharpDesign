@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +16,16 @@ import com.mad.sharpdesign.events.ApplyEvent;
 import com.mad.sharpdesign.events.StrengthEvent;
 
 import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 
-public class StrengthFragment extends Fragment {
+public class NegativeStrengthFragment extends Fragment {
     private SeekBar mStrengthSeekbar;
     private TextView mStrengthTextView;
     private Button mApplyButton;
     private int mMaxStrength, mCurrentStrength;
     private static final String STRENGTH_KEY = "Strength";
 
-    public static StrengthFragment newInstance(int strength) {
-        StrengthFragment strengthFragment = new StrengthFragment();
+    public static NegativeStrengthFragment newInstance(int strength) {
+        NegativeStrengthFragment strengthFragment = new NegativeStrengthFragment();
         Bundle args = new Bundle();
         args.putInt(STRENGTH_KEY, strength);
         strengthFragment.setArguments(args);
@@ -48,11 +46,12 @@ public class StrengthFragment extends Fragment {
         mStrengthTextView = (TextView)getView().findViewById(R.id.fragment_strength_textView);
         mApplyButton = (Button)getView().findViewById(R.id.fragment_strength_applyButton);
         mStrengthSeekbar.setMax(mMaxStrength);
-        mStrengthTextView.setText("0");
+        mStrengthSeekbar.setProgress(mMaxStrength / 2);
+        mStrengthTextView.setText(Integer.toString(mStrengthSeekbar.getProgress()));
         mStrengthSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mCurrentStrength = i;
+                mCurrentStrength = i - mMaxStrength / 2;
                 mStrengthTextView.setText(Integer.toString(i));
                 EventBus.getDefault().post(new StrengthEvent(mCurrentStrength));
             }

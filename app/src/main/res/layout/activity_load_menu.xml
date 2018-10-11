@@ -9,23 +9,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/padding_8dp">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:srcCompat="@mipmap/title_fg"
+            android:layout_weight="5"/>
 
         <Button
+            android:layout_marginBottom="@dimen/padding_8dp"
             android:id="@+id/btn_loadFile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/loadfragment_border_rounded"
             android:text="Load from Gallery" />
 
         <Button
             android:id="@+id/btn_loadURL"
+            android:layout_marginBottom="@dimen/padding_8dp"
             android:layout_width="match_parent"
+            android:background="@drawable/loadfragment_border_rounded"
             android:layout_height="wrap_content"
             android:text="Load from URL" />
 
         <Button
             android:id="@+id/btn_takePicture"
             android:layout_width="match_parent"
+            android:background="@drawable/loadfragment_border_rounded"
             android:layout_height="wrap_content"
             android:text="Take new picture" />
 

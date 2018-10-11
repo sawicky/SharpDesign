@@ -19,18 +19,24 @@ import android.widget.Toast;
 
 import com.mad.sharpdesign.R;
 import com.mad.sharpdesign.editmenu.fragments.BlankFragment;
+import com.mad.sharpdesign.editmenu.fragments.NegativeStrengthFragment;
 import com.mad.sharpdesign.editmenu.fragments.RGBFragment;
 import com.mad.sharpdesign.editmenu.fragments.StrengthFragment;
 import com.mad.sharpdesign.events.ApplyEvent;
 import com.mad.sharpdesign.events.RGBEvent;
 import com.mad.sharpdesign.events.StrengthEvent;
+import com.mad.sharpdesign.utils.manipulation.Brightness;
+import com.mad.sharpdesign.utils.manipulation.CheapGaussianBlur;
 import com.mad.sharpdesign.utils.manipulation.ColourIntensity;
+import com.mad.sharpdesign.utils.manipulation.Gamma;
 import com.mad.sharpdesign.utils.manipulation.Greyscale;
 import com.mad.sharpdesign.utils.manipulation.IntrinsicSharpen;
 import com.mad.sharpdesign.utils.manipulation.Invert;
 import com.mad.sharpdesign.utils.manipulation.Polaroid;
 import com.mad.sharpdesign.utils.manipulation.RealGaussianBlur;
+import com.mad.sharpdesign.utils.manipulation.Rotate;
 import com.mad.sharpdesign.utils.manipulation.Saturate;
+import com.mad.sharpdesign.utils.manipulation.Sepia;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,6 +57,7 @@ public class EditActivity extends AppCompatActivity {
     private StrengthFragment mStrengthFragment;
     private BlankFragment mBlankFragment;
     private RGBFragment mRGBFragment;
+    private NegativeStrengthFragment mNegativeStrengthFragment;
     private FragmentTransaction mTransaction;
     private static final String IMAGE_PATH_KEY = "ImagePathKey";
     private static final String IMAGE_KEY = "ImageKey";
@@ -69,6 +76,7 @@ public class EditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         Intent intent = getIntent();
@@ -79,6 +87,7 @@ public class EditActivity extends AppCompatActivity {
 
         try {
             mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mFilePath);
+            mNewBitmap = mBitmap.copy(mBitmap.getConfig(), true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,6 +97,7 @@ public class EditActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mEffectSelected = i;
                 //Change previewed bitmap back to the original.
+                mMainImageView.setImageBitmap(mBitmap);
                 //Picasso.get().load(getImageUri(getApplicationContext(), mNewBitmap)).into(mMainImageView);
                 switch (i){
                     case 0: //Greyscale
@@ -101,7 +111,7 @@ public class EditActivity extends AppCompatActivity {
                         mStrengthEffect = 1;
                         break;
                     case 2: //Sharpen
-                        mStrengthFragment = StrengthFragment.newInstance(25);
+                        mStrengthFragment = StrengthFragment.newInstance(100);
                         createTransaction(mStrengthFragment);
                         mStrengthEffect = 2;
                         break;
@@ -109,22 +119,49 @@ public class EditActivity extends AppCompatActivity {
                         mBlankFragment = BlankFragment.newInstance();
                         createTransaction(mBlankFragment);
                         mNewBitmap = Invert.invert(getApplicationContext(), mBitmap);
-                        Picasso.get().load(getImageUri(getApplicationContext(), mNewBitmap)).into(mMainImageView);
+                        mMainImageView.setImageBitmap(mNewBitmap);
                         break;
                     case 4://Polaroid
                         mBlankFragment = BlankFragment.newInstance();
                         createTransaction(mBlankFragment);
                         mNewBitmap = Polaroid.polaroid(mBitmap,0,0,0);
-                        Picasso.get().load(getImageUri(getApplicationContext(), mNewBitmap)).into(mMainImageView);
+                        mMainImageView.setImageBitmap(mNewBitmap);
                         break;
                     case 5://Fake Blur
+                        mBlankFragment = BlankFragment.newInstance();
+                        createTransaction(mBlankFragment);
+                        mNewBitmap = CheapGaussianBlur.gaussianBlur(mBitmap);
+                        mMainImageView.setImageBitmap(mNewBitmap);
                         break;
                     case 6://Sepia
+                        mBlankFragment = BlankFragment.newInstance();
+                        createTransaction(mBlankFragment);
+                        mNewBitmap = Sepia.sepia(mBitmap);
+                        mMainImageView.setImageBitmap(mNewBitmap);
+                        break;
+                    case 7: //Gamma correction
+                        mNegativeStrengthFragment = NegativeStrengthFragment.newInstance(100);
+                        createTransaction(mNegativeStrengthFragment);
+                        mStrengthEffect = 3;
+                        Toast.makeText(getApplicationContext(), "The math here still needs work ;-)", Toast.LENGTH_LONG).show();
+
+                        break;
+                    case 8://Contrast
+                        break;
+                    case 9://Brightness
+                        mNegativeStrengthFragment = NegativeStrengthFragment.newInstance(100);
+                        createTransaction(mNegativeStrengthFragment);
+                        mStrengthEffect =4;
+                        break;
+                    case 10://Rotate Image
+                        mNegativeStrengthFragment = NegativeStrengthFragment.newInstance(180);
+                        createTransaction(mNegativeStrengthFragment);
+                        mStrengthEffect = 5;
                         break;
                     case 11://Saturate
-                        mStrengthFragment = StrengthFragment.newInstance(100);
+                        mStrengthFragment = StrengthFragment.newInstance(255);
                         createTransaction(mStrengthFragment);
-                        mStrengthEffect = 3;
+                        mStrengthEffect = 6;
                         break;
                     case 12: //Colour Intensity
                         mRGBFragment = RGBFragment.newInstance(255, 255,255,  122);
@@ -144,17 +181,26 @@ public class EditActivity extends AppCompatActivity {
     }
     public void createTransaction(StrengthFragment fragment){
         mTransaction = getSupportFragmentManager().beginTransaction();
+        mTransaction.setCustomAnimations(R.anim.enter_left, R.anim.exit_right);
         mTransaction.replace(R.id.placeholder_fragment, mStrengthFragment);
         mTransaction.commit();
     }
     public void createTransaction(BlankFragment fragment) {
         mTransaction = getSupportFragmentManager().beginTransaction();
+        mTransaction.setCustomAnimations(R.anim.enter_left, R.anim.exit_right);
         mTransaction.replace(R.id.placeholder_fragment, mBlankFragment);
         mTransaction.commit();
     }
     public void createTransaction(RGBFragment fragment) {
         mTransaction = getSupportFragmentManager().beginTransaction();
+        mTransaction.setCustomAnimations(R.anim.enter_left, R.anim.exit_right);
         mTransaction.replace(R.id.placeholder_fragment, mRGBFragment);
+        mTransaction.commit();
+    }
+    public void createTransaction(NegativeStrengthFragment fragment) {
+        mTransaction = getSupportFragmentManager().beginTransaction();
+        mTransaction.setCustomAnimations(R.anim.enter_left, R.anim.exit_right);
+        mTransaction.replace(R.id.placeholder_fragment, fragment);
         mTransaction.commit();
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -174,12 +220,24 @@ public class EditActivity extends AppCompatActivity {
             case 2://Sharpen
                 mNewBitmap = IntrinsicSharpen.sharpen(getApplicationContext(), mBitmap, strength);
                 break;
-            case 3://Saturate
+            case 3: //Gamma
+                mNewBitmap = Gamma.gamma(getApplicationContext(), mBitmap, strength);
+                break;
+
+            case 4://Brightness
+                mNewBitmap = Brightness.brightness(getApplicationContext(), mBitmap, strength);
+                break;
+            case 5://Rotate
+                mNewBitmap = Rotate.rotate(getApplicationContext(), mBitmap, strength);
+                break;
+            case 6://Saturate
                 mNewBitmap = Saturate.saturate(getApplicationContext(), mBitmap, strength);
+                break;
             default:
                 break;
         }
-        Picasso.get().load(getImageUri(this, mNewBitmap)).into(mMainImageView);
+        mMainImageView.setImageBitmap(mNewBitmap);
+        //Picasso.get().load(getImageUri(this, mNewBitmap)).into(mMainImageView);
 
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -202,18 +260,19 @@ public class EditActivity extends AppCompatActivity {
             default:
                 break;
         }
-        Picasso.get().load(getImageUri(this, mNewBitmap)).into(mMainImageView);
+        mMainImageView.setImageBitmap(mNewBitmap);
+        //Picasso.get().load(getImageUri(this, mNewBitmap)).into(mMainImageView);
     }
 
         public Uri getImageUri(Context context, Bitmap image) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         //image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), image, "temp", null);
-        File imageFile = new File(path);
-        if (imageFile.exists()) {
-            imageFile.delete();
-        }
-        return Uri.parse(path);
+        Log.d("MAD", "Saved file into " +path);
+        final Uri pathURI = Uri.parse(path);
+        File file = new File(path);
+        file.delete();
+        return pathURI;
     }
 
 }

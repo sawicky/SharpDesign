@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ActionBar;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -88,6 +89,7 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_menu);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
@@ -354,7 +356,7 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
                     Bitmap bitmap = BitmapFactory.decodeFile(capturedImagePath, options);
                     ImageRotate rotate = new ImageRotate(capturedImagePath, bitmap);
                     bitmap = rotate.getRotatedBitmap();
-                    loadImageIntoPreview(CAMERA_DIALOG_KEY, getImageUri(this, bitmap));
+                    mCameraImageView.setImageBitmap(bitmap);
                     mPath = getImageUri(this, bitmap);
                     Log.d("MAD", "My mpath is :" + mPath);
                 } else {
@@ -372,7 +374,7 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                     Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-                    loadImageIntoPreview(GALLERY_DIALOG_KEY, getImageUri(this, bitmap));
+                    mGalleryImageView.setImageBitmap(bitmap);
                     mPath = getImageUri(this, bitmap);
                 } else {
                     mLoadImageGallery.cancel();
@@ -387,7 +389,8 @@ public class LoadActivity extends AppCompatActivity implements LoadContract {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         //image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), image, "temp", null);
-        return Uri.parse(path);
+        final Uri pathURI = Uri.parse(path);
+        return pathURI;
     }
     public void pasteClipboard() {
         mImageLoader = ImageLoader.getInstance();

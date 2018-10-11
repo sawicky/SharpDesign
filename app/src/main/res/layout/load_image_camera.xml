@@ -6,47 +6,63 @@
     android:layout_height="wrap_content">
 
 
-    <ImageView
-        android:id="@+id/imageView_loadCamera"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_alignParentTop="true"
-        android:scaleType="fitCenter" />
-
     <LinearLayout
-        android:id="@+id/loadCamera_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/mainGrey"
-        android:layout_below="@id/imageView_loadCamera"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageView_loadCamera"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitCenter" />
 
-            <Button
-                android:id="@+id/btn_loadCamera_cancel"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/loadCamera_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView_loadCamera"
+            android:background="@color/mainGrey"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="CAncel" />
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_loadCamera_retake"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Take another picture" />
+                <Button
+                    android:id="@+id/btn_loadCamera_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/padding_8dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:textSize="12sp"
+                    android:text="CAncel" />
 
-            <Button
-                android:id="@+id/btn_loadCamera_load"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Load" />
+                <Button
+                    android:id="@+id/btn_loadCamera_retake"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/padding_8dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:textSize="12sp"
+                    android:text="Take again" />
 
+                <Button
+                    android:id="@+id/btn_loadCamera_load"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/padding_8dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:textSize="12sp"
+                    android:text="Load" />
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

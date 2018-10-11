@@ -63,18 +63,19 @@ public class RGBFragment extends Fragment {
         mBlueTextView = (TextView)getView().findViewById(R.id.fragment_rgb_blueTextView);
         mApplyButton = (Button)getView().findViewById(R.id.fragment_rgb_applyButton);
         mRedSeekBar.setMax(mMaxRed);
-        mRedSeekBar.setProgress(mProgress);
+        mRedSeekBar.setProgress(mMaxRed / 2);
         mGreenSeekBar.setMax(mMaxGreen);
-        mGreenSeekBar.setProgress(mProgress);
+        mGreenSeekBar.setProgress(mMaxGreen / 2);
         mBlueSeekBar.setMax(mMaxBlue);
-        mBlueSeekBar.setProgress(mProgress);
+        mBlueSeekBar.setProgress(mMaxBlue / 2);
 
         mCurrentRed = mCurrentBlue = mCurrentGreen = 1;
         mRedSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mCurrentRed = i;
-                mRedTextView.setText(Integer.toString(i));
+                mCurrentRed = i - (mMaxRed / 2);
+                mRedTextView.setText(Integer.toString(mCurrentRed));
+                updateRGB();
             }
 
             @Override
@@ -84,15 +85,15 @@ public class RGBFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                updateRGB();
 
             }
         });
         mGreenSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mCurrentGreen = i;
-                mGreenTextView.setText(Integer.toString(i));
+                mCurrentGreen = i - (mMaxGreen / 2);
+                mGreenTextView.setText(Integer.toString(mCurrentGreen));
+                updateRGB();
             }
 
             @Override
@@ -102,14 +103,14 @@ public class RGBFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                updateRGB();
             }
         });
         mBlueSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mCurrentBlue = i;
-                mBlueTextView.setText(Integer.toString(i));
+                mCurrentBlue = i - (mMaxBlue /2 );
+                mBlueTextView.setText(Integer.toString(mCurrentBlue));
+                updateRGB();
             }
 
             @Override
@@ -119,7 +120,6 @@ public class RGBFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                updateRGB();
             }
         });
 

@@ -10,6 +10,7 @@ import android.renderscript.ScriptIntrinsicConvolve3x3;
 
 public class IntrinsicSharpen {
     public static Bitmap sharpen(Context context, Bitmap bitmap, float weight) {
+        weight = weight / 10;
         Bitmap newBitmap = bitmap.copy(bitmap.getConfig(), true);
         RenderScript mScript = RenderScript.create(context);
         final Allocation input = Allocation.createFromBitmap(mScript, newBitmap);
